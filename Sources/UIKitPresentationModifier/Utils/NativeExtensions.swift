@@ -52,8 +52,15 @@ extension UIViewController {
         if let tabBarController = self as? UITabBarController {
             return tabBarController.selectedViewController?.topmostViewController ?? self
         }
-        
-        return self
+
+        var viewController = self
+
+        while viewController is UIKitPresentationModifierIgnoredViewController,
+              let parent = viewController.parent {
+            viewController = parent
+        }
+
+        return viewController
     }
 
     static let didDismissNotification = Notification.Name(rawValue: "pm_didDismissNotification")
@@ -80,3 +87,6 @@ extension UIViewController {
         method_exchangeImplementations(originalMethod, swizzledMethod)
     }()
 }
+
+/// View Controller that's ignored when looking for top most view controller
+public protocol UIKitPresentationModifierIgnoredViewController {}
