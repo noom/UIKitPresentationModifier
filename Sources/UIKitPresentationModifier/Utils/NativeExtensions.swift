@@ -56,7 +56,7 @@ extension UIViewController {
         var viewController = self
 
         while viewController is UIKitPresentationModifierIgnoredViewController,
-              let parent = viewController.parent {
+              let parent = viewController.parent ?? viewController.presentingViewController {
             viewController = parent
         }
 
